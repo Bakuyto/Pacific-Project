@@ -1,7 +1,4 @@
-<?php
-include 'create.php';
-?>
-
+<?php include '../config/config.php' ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -11,6 +8,7 @@ include 'create.php';
   <title>Create User Page</title>
   <link rel="stylesheet" href="../css/bootstrap.min.css">
   <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/create-user.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -58,7 +56,8 @@ include 'create.php';
                 </thead>
                 <tbody>
 
-                  <?php include 'department.php' ?>  
+                  <?php include '../partitial/department.php' ?>
+
 
                 </tbody>
               </table>
@@ -88,7 +87,7 @@ include 'create.php';
                 </thead>
                 <tbody>
 
-                    <?php include 'transaction.php' ?>
+                <?php include '../partitial/transaction.php' ?>
 
                 </tbody>
               </table>
@@ -110,25 +109,7 @@ include 'create.php';
               style="width:80%;max-height:20vh; overflow-y:scroll;" aria-label="Default select example">
               <option class="text-dark" selected>Select Department</option>
 
-              <?php
-                    include 'connect.php';
-                    $sql = "CALL Load_All_department"; // SQL query to select data from the table
-                    $result = $conn->query($sql); // Execute the query
-    
-                    if ($result->num_rows > 0) {
-                      while ($row = $result->fetch_assoc()) {
-                          $department_name = $row['department_name']; // Fetch department name
-                          $option = $row['department_pk'];// Fetch department pk
-                          // Output data row by row
-                  ?>
-                          <option value="<?php echo $option; ?>"><?php echo $department_name; ?> </option>
-                  <?php
-                      }
-                  } else {
-                      echo "<option value='' selected>No departments found</option>"; // Output if no results found
-                  }
-                    $conn->close(); // Close the database connection
-                  ?>
+              <?php include '../partitial/select_department.php' ?>
 
             </select>
             <div class="save-but d-flex justify-content-center m-auto">
@@ -149,8 +130,8 @@ include 'create.php';
                 </thead>
                 <tbody>
 
-                    <?php include 'user-list.php'?>
-
+                <?php include '../partitial/user-list.php' ?>
+                
                 </tbody>
               </table>
             </div>
@@ -168,7 +149,7 @@ include 'create.php';
 
 
  <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+ <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -176,53 +157,9 @@ include 'create.php';
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form method='POST' action="code.php">
-                <?php
-                include 'connect.php';
-                
-                $departmentPk = '9';
-                // Query to fetch checked department names from the database
-                $checked_values_query = "SELECT product_tran_name_str,department_fk FROM tblproductadjustpermission where department_fk = $departmentPk";
-                $checked_values_result = $conn->query($checked_values_query);
-
-                // Initialize $checked_values array
-                $checked_values = array();
-
-                // Check if the query was successful and rows were returned
-                if ($checked_values_result && $checked_values_result->num_rows > 0) {
-                    // Loop through the fetched rows and populate $checked_values array
-                    while ($row = $checked_values_result->fetch_assoc()) {
-                        $checked_values[] = $row['product_tran_name_str'];
-                    }
-                }
-
-                $sql = "CALL Load_All_Transaction"; 
-                $result = $conn->query($sql); // Execute the query
-
-                if ($result && $result->num_rows > 0) {
-                    // Output the hidden input field for department_pk
-                    echo "<input type='hidden' name='department_pk' id='department_pk_input' value='department_pk'>";
-
-                    // Loop through your checkboxes and output them
-                    while ($row = $result->fetch_assoc()) {
-                        $checkbox_value = $row["department_name"];
-                        $checked = in_array($checkbox_value, $checked_values) ? 'checked' : ''; // Check if the checkbox value exists in the checked values array
-
-                        echo "<div class='form-group mb-3 d-flex justify-content-between'>
-                                  <label>$checkbox_value</label>
-                                  <input class='form-check-input' type='checkbox' name='brands[]' value='$checkbox_value' $checked>
-                              </div>";
-                    }
-                } else {
-                    echo "<label>No results found</label>"; // Output if no results found
-                }
-                ?>
-
-                            <div class='form-group mb-3 d-flex justify-content-end'>
-                                <button type='button' class='btn btn-secondary mx-2' data-bs-dismiss='modal'>Close</button>
-                                <button type='submit' name='save_multiple_checkbox' class='btn btn-primary'>Submit</button>
-                            </div>
-                </form>
+            <form method='POST'>
+              <?php include '../partitial/modal-department.php';?>
+            </form>
             </div>
         </div>
     </div>
@@ -239,7 +176,7 @@ include 'create.php';
         <div class="modal-body">
           <p>Are you sure you want to delete this transaction?</p>
           <form id="deleteTransactionForm" class="d-flex justify-content-center" method="POST">
-            <input type="hidden" name="transactionToDelete" id="transactionToDelete">
+            <input type="text" name="transactionToDelete" id="transactionToDelete">
             <button type="button" class="btn btn-secondary mx-1" data-bs-dismiss="modal">Cancel</button>
             <button type="submit" name="submit_delete_transaction" class="btn btn-danger">Delete</button>
           </form>
@@ -250,27 +187,11 @@ include 'create.php';
 </body>
 <script src="../js/bootstrap.min.js"></script>
 <script src="../js/create-user.js"></script>
+<script src="../js/style.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-  document.querySelectorAll('.plus-btn').forEach(button => {
-    button.addEventListener('click', function () {
-      var departmentName = this.getAttribute('data-department-name');
-      var modalTitle = document.querySelector('#exampleModal .modal-title');
-      modalTitle.textContent = departmentName;
-      modalTitle.id = ""; // Clear the ID first
-      modalTitle.id = this.parentNode.id; // Set the ID based on the department ID
-    });
-  });
-</script>
-<script>
-  $(document).ready(function () {
-    $('#exampleModal').on('show.bs.modal', function (event) {
-      var button = $(event.relatedTarget);
-      var department_pk = button.data('department-pk');
-      var modal = $(this);
-      modal.find('#department_pk_input').val(department_pk);
-    });
-  });
-</script>
-
 </html>
+
+
+
+
+

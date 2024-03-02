@@ -1,5 +1,5 @@
 <?php
-         include 'connect.php';
+         include '../connection/connect.php';
          $sql = "CALL Load_All_Transaction"; // SQL query to select data from the table
          $result = $conn->query($sql); // Execute the query
     if ($result && $result->num_rows > 0) {

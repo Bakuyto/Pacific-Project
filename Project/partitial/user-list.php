@@ -1,5 +1,5 @@
 <?php
-                include 'connect.php';
+                include '../connection/connect.php';
                 $sql = "CALL Load_All_User"; // SQL query to select data from the table
                 $result = $conn->query($sql); // Execute the query
 

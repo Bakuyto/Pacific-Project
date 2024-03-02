@@ -6,6 +6,7 @@
   <title>Test page</title>
   <link rel="stylesheet" href="../css/bootstrap.min.css">
   <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/test.css">
 </head>
 <body>
   
