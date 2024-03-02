@@ -1,5 +1,4 @@
-
-
+<?php include '../config/config.php' ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -57,7 +56,8 @@
                 </thead>
                 <tbody>
 
-                  <?php include '../partitial/department.php' ?>  
+                  <?php include '../partitial/department.php' ?>
+
 
                 </tbody>
               </table>
@@ -87,7 +87,7 @@
                 </thead>
                 <tbody>
 
-                    <?php include '../partitial/transaction.php' ?>
+                <?php include '../partitial/transaction.php' ?>
 
                 </tbody>
               </table>
@@ -130,8 +130,8 @@
                 </thead>
                 <tbody>
 
-                    <?php include '../partitial/user-list.php'?>
-
+                <?php include '../partitial/user-list.php' ?>
+                
                 </tbody>
               </table>
             </div>
@@ -147,9 +147,8 @@
 
   </div>
 
-
  <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+ <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -209,6 +208,7 @@
     </div>
 </div>
 
+
   <!-- Modal -->
   <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -231,27 +231,11 @@
 </body>
 <script src="../js/bootstrap.min.js"></script>
 <script src="../js/create-user.js"></script>
+<script src="../js/style.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-  document.querySelectorAll('.plus-btn').forEach(button => {
-    button.addEventListener('click', function () {
-      var departmentName = this.getAttribute('data-department-name');
-      var modalTitle = document.querySelector('#exampleModal .modal-title');
-      modalTitle.textContent = departmentName;
-      modalTitle.id = ""; // Clear the ID first
-      modalTitle.id = this.parentNode.id; // Set the ID based on the department ID
-    });
-  });
-</script>
-<script>
-  $(document).ready(function () {
-    $('#exampleModal').on('show.bs.modal', function (event) {
-      var button = $(event.relatedTarget);
-      var department_pk = button.data('department-pk');
-      var modal = $(this);
-      modal.find('#department_pk_input').val(department_pk);
-    });
-  });
-</script>
-
 </html>
+
+
+
+
+
