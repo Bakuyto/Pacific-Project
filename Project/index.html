@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dynamic Modal with Checkboxes</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <!-- Bootstrap JavaScript and dependencies -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<!-- Button to trigger the modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#dynamicModal">
+  Open Dynamic Modal
+</button>
+
+<!-- Dynamic Modal -->
+<div class="modal fade" id="dynamicModal" tabindex="-1" role="dialog" aria-labelledby="dynamicModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="dynamicModalLabel">Dynamic Modal with Checkboxes</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="modalBody">
+        <!-- Checkboxes will be dynamically added here -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onclick="getSelectedValues()">Get Selected Values</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Array of options for checkboxes
+  var options = ['Option 1', 'Option 2', 'Option 3', 'Option 4', 'Option 5'];
+
+  // Function to populate checkboxes dynamically
+  function populateCheckboxes() {
+    var modalBody = document.getElementById('modalBody');
+    modalBody.innerHTML = ''; // Clear existing content
+
+    options.forEach(function(option) {
+      var checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.name = 'checkbox';
+      checkbox.value = option;
+      modalBody.appendChild(checkbox);
+
+      var label = document.createElement('label');
+      label.textContent = option;
+      modalBody.appendChild(label);
+
+      var lineBreak = document.createElement('br');
+      modalBody.appendChild(lineBreak);
+    });
+  }
+
+  // Call the function to populate checkboxes when modal is shown
+  $('#dynamicModal').on('shown.bs.modal', function (e) {
+    populateCheckboxes();
+  });
+
+  // Function to get selected values
+  function getSelectedValues() {
+    var selectedValues = [];
+    var checkboxes = document.getElementsByName('checkbox');
+
+    checkboxes.forEach(function(checkbox) {
+      if (checkbox.checked) {
+        selectedValues.push(checkbox.value);
+      }
+    });
+
+    alert('Selected Values: ' + selectedValues.join(', '));
+  }
+</script>
+
+</body>
+</html>

@@ -1,3 +1,35 @@
+<?php
+session_start(); // Start the session
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    include '../connection/connect.php';
+
+    // Sanitize and retrieve username and password from the form
+    $myusername = mysqli_real_escape_string($conn, $_POST['username']);
+    $mypassword = mysqli_real_escape_string($conn, $_POST['password']);
+
+    // Query the database to check if the provided credentials are valid
+    // $sql = "SELECT id FROM login WHERE username = '$myusername' and password = '$mypassword'";
+    $sql = "CALL User_login ('$myusername','$mypassword')";
+    $result = mysqli_query($conn, $sql);
+    $count = mysqli_num_rows($result);
+
+    // If result matched $myusername and $mypassword, table row must be 1 row
+    if ($count == 1) {
+      $_SESSION['login_user'] = $myusername; // Set session variable
+      header("location: main.php"); // Redirect to main.php
+  }else if($count < 0){
+    echo '<script>alert("Please Enter Username or Password");</script>'; // Show alert for incorrect credentials
+  }
+   else {
+      echo '<script>alert("Incorrect username or password");</script>'; // Show alert for incorrect credentials
+  }
+
+    // Close the database connection
+    $conn->close();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

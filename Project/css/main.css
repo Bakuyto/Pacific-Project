@@ -89,3 +89,62 @@ table tr td{
 tr:nth-child(even){
   background-color: rgba(211, 211, 211, 0.521);
 }
+
+/* Paginatin button */
+
+.buttons{
+  margin-top:100;
+  display:flex;
+  justify-content:center;
+  gap: 5px;;
+}
+.buttons button{
+  border:none;
+  padding:0.4rem 1.2rem;
+  background-color:var(--blue);
+  color:black;
+  border-radius:5px;
+  cursor:pointer
+}
+
+#page-number{
+  border:none;
+  text-align:center;
+  width:3rem;
+  border-radius:5px;
+  border: 1px solid var(--grey);
+}
+#page-number:focus{
+  outline:none;
+}
+
+.list-container{
+  display:flex;
+  justify-content:center;
+}
+.list-container{
+  height:700px;
+}
+.list-container ul {
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  grid-template-rows:repeat(5,1fr);
+  gap:1rem;
+}
+.list-container ul li {
+  width:100px;
+  height:60px;
+  margin:20px 0;
+  list-style:none;
+  padding:0.5rem 1rem;
+  background-color:slateblue;
+  color:white;
+  border-radius:5px;
+}
+
+.buttons{
+  height: 40px;
+}
+.buttons .page-of{
+  line-height: 40px;
+}

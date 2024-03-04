@@ -1,4 +1,4 @@
-
+<?php include '../config/config.php'?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -158,46 +158,27 @@
             </div>
             <div class="modal-body">
                 <form method='POST' action="code.php">
-                <?php
-                include '../connection/connect.php';
-                
-                $departmentPk = '9';
-                // Query to fetch checked department names from the database
-                $checked_values_query = "SELECT product_tran_name_str,department_fk FROM tblproductadjustpermission where department_fk = $departmentPk";
-                $checked_values_result = $conn->query($checked_values_query);
+                  <?php
+                  include '../connection/connect.php';
 
-                // Initialize $checked_values array
-                $checked_values = array();
+                  $sql = "CALL Load_All_Transaction"; 
+                  $result = $conn->query($sql); // Execute the query
 
-                // Check if the query was successful and rows were returned
-                if ($checked_values_result && $checked_values_result->num_rows > 0) {
-                    // Loop through the fetched rows and populate $checked_values array
-                    while ($row = $checked_values_result->fetch_assoc()) {
-                        $checked_values[] = $row['product_tran_name_str'];
-                    }
-                }
-
-                $sql = "CALL Load_All_Transaction"; 
-                $result = $conn->query($sql); // Execute the query
-
-                if ($result && $result->num_rows > 0) {
-                    // Output the hidden input field for department_pk
-                    echo "<input type='hidden' name='department_pk' id='department_pk_input' value='department_pk'>";
-
-                    // Loop through your checkboxes and output them
-                    while ($row = $result->fetch_assoc()) {
-                        $checkbox_value = $row["department_name"];
-                        $checked = in_array($checkbox_value, $checked_values) ? 'checked' : ''; // Check if the checkbox value exists in the checked values array
-
-                        echo "<div class='form-group mb-3 d-flex justify-content-between'>
-                                  <label>$checkbox_value</label>
-                                  <input class='form-check-input' type='checkbox' name='brands[]' value='$checkbox_value' $checked>
-                              </div>";
-                    }
-                } else {
-                    echo "<label>No results found</label>"; // Output if no results found
-                }
-                ?>
+                  if ($result && $result->num_rows > 0) {
+                      // Output the hidden input field for department_pk
+                      echo "<input type='hidden' name='department_pk' id='department_pk_input' value='department_pk'>";
+                      
+                      // Loop through your checkboxes and output them
+                      while ($row = $result->fetch_assoc()) {
+                          echo "<div class='form-group mb-3 d-flex justify-content-between'>
+                                  <label>" . $row["department_name"] . "</label>
+                                  <input class='form-check-input' type='checkbox' name='brands[]' value='" . $row["department_name"] . "'>
+                                </div>";
+                      }
+                  } else {
+                      echo "<label>No results found</label>"; // Output if no results found
+                  }
+                  ?>
 
                             <div class='form-group mb-3 d-flex justify-content-end'>
                                 <button type='button' class='btn btn-secondary mx-2' data-bs-dismiss='modal'>Close</button>
@@ -232,26 +213,14 @@
 <script src="../js/bootstrap.min.js"></script>
 <script src="../js/create-user.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-  document.querySelectorAll('.plus-btn').forEach(button => {
-    button.addEventListener('click', function () {
-      var departmentName = this.getAttribute('data-department-name');
-      var modalTitle = document.querySelector('#exampleModal .modal-title');
-      modalTitle.textContent = departmentName;
-      modalTitle.id = ""; // Clear the ID first
-      modalTitle.id = this.parentNode.id; // Set the ID based on the department ID
-    });
-  });
-</script>
-<script>
-  $(document).ready(function () {
-    $('#exampleModal').on('show.bs.modal', function (event) {
-      var button = $(event.relatedTarget);
-      var department_pk = button.data('department-pk');
-      var modal = $(this);
-      modal.find('#department_pk_input').val(department_pk);
-    });
-  });
-</script>
-
+  <script>
+ $(document).ready(function (){
+   $('#exampleModal').on('show.bs.modal', function (event) {
+     var button = $(event.relatedTarget);
+     var department_pk = button.data('department-pk');
+     var modal = $(this);
+     modal.find('#department_pk_input').val(department_pk);
+   });
+ });
+  </script>
 </html>

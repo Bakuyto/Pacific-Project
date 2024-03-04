@@ -58,25 +58,47 @@ if(isset($_POST['submit_user'])) {
 
 // Handling column deletion
 if(isset($_POST['submit_delete_transaction']) && isset($_POST['transactionToDelete']) && !empty($_POST['transactionToDelete'])) {
-  $transaction_id = $conn->real_escape_string($_POST['transactionToDelete']);
-  $sql1 = "CALL Delete_Column('tblproduct_transaction','$transaction_id')";
-  $sql2 = "DELETE From tblproductadjustpermission where product_tran_name_str = '$transaction_id'";
+  $transaction_value = $conn->real_escape_string($_POST['transactionToDelete']);
+  $sql = "CALL Delete_Column('tblproduct_transaction','$transaction_value')";
+  $sql1 = "DELETE FROM tblproductadjustpermission WHERE product_tran_name_str = '$transaction_value'";
 
-
-  if ($conn->query($sql1) === TRUE) {
+  if ($conn->query($sql) === TRUE && $conn->query($sql1) === TRUE) {
       echo "<script>alert('Transaction data deleted successfully');</script>";
       // Redirect to avoid form resubmission or reload the current page
       header("Location: ".$_SERVER['REQUEST_URI']);
       exit();
   } else {
+      echo "Error: " . $conn->error;
   }
-  if ($conn->query($sql2) === TRUE) {
-    echo "<script>alert('Transaction data deleted successfully');</script>";
-    // Redirect to avoid form resubmission or reload the current page
-    header("Location: ".$_SERVER['REQUEST_URI']);
-    exit();
-} else {
 }
+if(isset($_POST['save_multiple_checkbox'])) {
+  $department_fk = $_POST['department_fk']; // Get the department_pk from the form
+  $brands = $_POST['brands']; // Get the selected brands array from the form
+
+  // Check if any brand is selected
+  if(!empty($brands)) {
+      // Prepare the stored procedure call
+      $stmt = $conn->prepare("CALL Insert_Multiple_Checkbox(?, ?)");
+
+      // Bind parameters
+      $stmt->bind_param("is", $department_fk, $brand);
+
+      // Execute the stored procedure for each selected brand
+      foreach($brands as $brand) {
+          $stmt->execute();
+      }
+
+      // Close the statement
+      $stmt->close();
+
+      // Redirect or output success message
+      echo "Data inserted successfully!";
+      // You can redirect the user to another page or show a success message here
+  } else {
+      // No brands selected, handle this case
+      echo "Please select at least one brand!";
+      // You can redirect the user back to the form or show an error message
+  }
 }
 
 // Close the database connection
