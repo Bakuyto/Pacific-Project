@@ -15,19 +15,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $count = mysqli_num_rows($result);
 
     // If result matched $myusername and $mypassword, table row must be 1 row
-    if ($count == 1) {
-      $_SESSION['login_user'] = $myusername; // Set session variable
-      header("location: main.php"); // Redirect to main.php
-  }else if($count < 0){
-    echo '<script>alert("Please Enter Username or Password");</script>'; // Show alert for incorrect credentials
-  }
-   else {
-      echo '<script>alert("Incorrect username or password");</script>'; // Show alert for incorrect credentials
-  }
+      if ($count == 1) {
+        $_SESSION['login_user'] = $myusername; // Set session variable
+        header("location: main.php"); // Redirect to main.php
+    }else if($count < 0){
+      echo '<script>alert("Please Enter Username or Password");</script>'; // Show alert for incorrect credentials
+     }else {
+        echo '<script>alert("Incorrect username or password");</script>'; // Show alert for incorrect credentials
+    }
+    
 
+
+  // $userlogname =mysqli_real_escape_string($conn, $_POST["userName"]) ;
+  // $password = mysqli_real_escape_string($conn, $_POST["pass_  word"]) ;
+
+  // $sql = "CALL User_login ($userlogname,$password)";
+  // $result = mysqli_query($conn, $sql);
+  // $row = mysqli_num_rows($result);
+
+  // if($row["user_level_fk"== 1]){
+  //   echo "admin";
+  // }elseif($row["user_level_fk"== 2]){
+  //   echo "staff";
+  // } 
     // Close the database connection
     $conn->close();
 }
+
 ?>
 
 <!DOCTYPE html>

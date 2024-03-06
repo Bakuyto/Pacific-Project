@@ -22,7 +22,7 @@
           <a href="create-user.php">Create</a>
         </li>
       </ul>
-    </nav>
+</nav>
       
 
 </body>

@@ -1,6 +1,4 @@
 <?php
-
-  session_start();
   include '../connection/connect.php'; 
 
   // Handling form submission for creating a new department
@@ -18,8 +16,8 @@
       }
   }
 
-    // Handling form submission for creating a new transaction
-    if(isset($_POST['submit_transaction']) && isset($_POST['column_name']) && !empty($_POST['column_name'])) {
+  // Handling form submission for creating a new transaction
+  if(isset($_POST['submit_transaction']) && isset($_POST['column_name']) && !empty($_POST['column_name'])) {
       $column_name = $conn->real_escape_string($_POST['column_name']);
       $sql = "CALL Insert_Column('$column_name')";
 
@@ -32,7 +30,7 @@
   }
 
   // Handling form submission for creating a new user
-if(isset($_POST['submit_user'])) {
+  if(isset($_POST['submit_user'])) {
   // Retrieve form data
   $user_full_name = $conn->real_escape_string($_POST['user_full_name']);
   $user_log_name = $conn->real_escape_string($_POST['user_log_name']);
@@ -56,8 +54,8 @@ if(isset($_POST['submit_user'])) {
   }
 }
 
-// Handling column deletion
-if(isset($_POST['submit_delete_transaction']) && isset($_POST['transactionToDelete']) && !empty($_POST['transactionToDelete'])) {
+  // Handling column deletion
+  if(isset($_POST['submit_delete_transaction']) && isset($_POST['transactionToDelete']) && !empty($_POST['transactionToDelete'])) {
   $transaction_value = $conn->real_escape_string($_POST['transactionToDelete']);
   $sql = "CALL Delete_Column('tblproduct_transaction','$transaction_value')";
 
@@ -67,8 +65,9 @@ if(isset($_POST['submit_delete_transaction']) && isset($_POST['transactionToDele
       header("Location: ".$_SERVER['REQUEST_URI']);
       exit();
   } 
-}
-if(isset($_POST['save_multiple_checkbox'])) {
+  }
+  // Handling form submission for creating a new department's transaction
+  if(isset($_POST['save_multiple_checkbox'])) {
   $department_fk = $_POST['department_fk']; // Get the department_pk from the form
   $brands = $_POST['brands']; // Get the selected brands array from the form
 
@@ -96,7 +95,7 @@ if(isset($_POST['save_multiple_checkbox'])) {
       echo "Please select at least one brand!";
       // You can redirect the user back to the form or show an error message
   }
-}
+  }
 
 // Close the database connection
 $conn->close();

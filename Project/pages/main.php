@@ -1,3 +1,4 @@
+<?php include '../connection/redirect.php'?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -28,6 +29,8 @@
           <input class="form-control me-1 w-50" type="search" placeholder="Search" aria-label="Search">
           <button class="btn btn-success" type="submit">Search</button>
         </form>
+        
+        <button type="button" class="btn btn-success" onclick="$('#addModal').modal('show')">ADD</button>
 
         <div class="form-inline d-flex flex-row gap-1">
           <input type="number" id="row" style="width:60px; height: 40px;" class="form-control"/>
@@ -39,296 +42,33 @@
     <section>
       <div class="tables container-fluid tbl-container d-flex flex-column justify-content-center align-content-center">
         <div class="row tbl-fixed">
-          <table class="table-striped table-condensed" id="myTable">
+          <table class="table-striped table-condensed"  style="width:1920px !important;" id="myTable">
             <thead>
               <tr>
-                <th>No</th>
-                <th>Hot Selling&Potential Models</th>
-                <th>ETA </th>
-                <th>RMA</th>
-                <th>Consignment Stock</th>
-                <th>Stock</th>
-                <th>Show room</th>
-                <th>Pre-Order</th>
-                <th>Current Stock </th>
-                <th>ATS</th>
-                <th>Stock Level</th>
-                <th>Av for Last 3or6 Mths</th>
-                <th>2024.12 sales</th>
-                <th>2024.11 sales</th>
-                <th>2024.10 sales</th>
-                <th>2024.09 sales</th>
-                <th>2024.08 sales</th>
-                <th>2024.07 sales</th>
-                <th>2024.06 sales</th>
-                <th>2024.05 sales</th>
-                <th>2024.04 sales</th>
-                <th>2024.03 sales</th>
-                <th>2024.02 sales</th>
-                <th>2024.01 sales</th>
+              <?php
+                  include '../connection/connect.php';
+
+                  $sql = "SELECT
+                  COLUMN_NAME AS department_name
+                  FROM INFORMATION_SCHEMA.COLUMNS
+                   WHERE TABLE_NAME = 'tblproduct_transaction';";
+                  $result = $conn->query($sql); // Execute the query
+
+                  if ($result && $result->num_rows > 0) {
+                  // Fetch column names from the database
+                  $columns = array();
+                  while ($row = $result->fetch_assoc()) {
+                   $columns[] = $row["department_name"];
+                  echo "<th class='text-center'>" . $row["department_name"] . "</th>";
+                  }
+                  } else {
+                  echo "<th>No results found</th>"; // Output if no results found
+                  }
+                  ?>
               </tr>
             </thead>
             <tbody id="table-body">
-              <tr>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-              </tr>
-              <tr>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-              </tr>
-              <tr>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-              </tr>
-              <tr>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-              </tr>
-              <tr>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-              </tr>
-              <tr>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-              </tr>
-              <tr>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-              </tr>
-              <tr>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-              </tr>
-              <tr>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-              </tr>
-              <tr>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-                <td contenteditable="true">1</td>
-              </tr>
+
             </tbody>
           </table>
         </div>
@@ -343,7 +83,73 @@
     </div>
 </div>
 
+<!-- Modal -->
+<div class="modal fade" style="--bs-modal-width: 1000px !important;" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addModalLabel">Create</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="process_form.php"> <!-- Specify the PHP script to handle form submission -->
+                    <div class="tables container-fluid tbl-container d-flex flex-column justify-content-center align-content-center">
+                        <div class="row tbl-fixed">
+                            <table class="table-striped table-condensed" id="myTable">
+                                <thead>
+                                    <tr>
+                                    <?php
+                                      include '../connection/connect.php';
+
+                                      $sql = "SELECT
+                                      COLUMN_NAME AS department_name
+                                      FROM INFORMATION_SCHEMA.COLUMNS
+                                       WHERE TABLE_NAME = 'tblproduct_transaction'
+                                       AND ORDINAL_POSITION >= 2;";
+                                      $result = $conn->query($sql); // Execute the query
+
+                                      if ($result && $result->num_rows > 0) {
+                                          // Fetch column names from the database
+                                          $columns = array();
+                                          while ($row = $result->fetch_assoc()) {
+                                              $columns[] = $row["department_name"];
+                                              echo "<th class='text-center'>" . $row["department_name"] . "</th>";
+                                          }
+                                      } else {
+                                          echo "<th>No results found</th>"; // Output if no results found
+                                      }
+                                    ?>
+                                    </tr>
+                                </thead>
+                                <?php
+                                    // Output empty input fields in the tbody
+                                    echo "<tbody><tr>";
+                                    if ($result && $result->num_rows > 0) {
+                                        foreach ($columns as $column) {
+                                            echo "<td><input type='text' name='" . $column . "'></td>";
+                                        }
+                                    } else {
+                                        // Output a single cell spanning all columns if no results found
+                                        echo "<td colspan='" . count($columns) . "'>No data available</td>";
+                                    }
+                                    echo "</tr></tbody>";
+                                ?>
+                            </table>
+                        </div>
+                    </div>
+                    <div class='form-group mb-3 mt-3 d-flex justify-content-end'>
+                        <button type='button' class='btn btn-secondary mx-2' data-bs-dismiss='modal'>Close</button>
+                        <button type='submit' name='submit_input' class='btn btn-primary'>Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 </body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="../js/bootstrap.min.js"></script>
 <script src="../js/main.js"></script>
 </html>

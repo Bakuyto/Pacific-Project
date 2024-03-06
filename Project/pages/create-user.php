@@ -1,4 +1,5 @@
-<?php include '../config/config.php'?>
+<?php include '../config/config.php';?>
+<?php include '../connection/redirect.php';?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -38,7 +39,7 @@
           <div class="box-header">
             <div class="h1 mt-5">New Department</div>
             <form method="POST">
-              <input name="department_name" class="form-control m-auto mt-5 border-black" style="width:80%;">
+              <input name="department_name" class="form-control m-auto mt-5 border-black" style="width:80%;" required>
               <div class="save-but d-flex justify-content-center m-auto mt-5">
                 <button type="submit" name="submit_department" style="background-color: var(--blue);"
                   class="btn fw-bolder mb-5 w-50">Save</button>
@@ -68,7 +69,7 @@
           <div class="box-header">
             <div class="h1 mt-5">New Transaction</div>
             <form method="POST">
-              <input name="column_name" class="form-control m-auto mt-5 border-black" style="width:80%;">
+              <input name="column_name" class="form-control m-auto mt-5 border-black" style="width:80%;" required>
               <div class="save-but d-flex justify-content-center m-auto mt-5">
                 <button type="submit" name="submit_transaction" style="background-color: var(--blue);"
                   class="btn fw-bolder mb-5 w-50">Save</button>
@@ -201,7 +202,7 @@
         <div class="modal-body">
           <p>Are you sure you want to delete this transaction?</p>
           <form id="deleteTransactionForm" class="d-flex justify-content-center" method="POST">
-            <input type="text" name="transactionToDelete" id="transactionToDelete">
+            <input type="hidden" name="transactionToDelete" id="transactionToDelete">
             <button type="button" class="btn btn-secondary mx-1" data-bs-dismiss="modal">Cancel</button>
             <button type="submit" name="submit_delete_transaction" class="btn btn-danger">Delete</button>
           </form>
