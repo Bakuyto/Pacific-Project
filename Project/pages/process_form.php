@@ -9,8 +9,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit_input"])) {
     $values = array();
     foreach ($_POST as $key => $value) {
         // Prevent SQL injection by using prepared statements
-        $values[$key] = $conn->real_escape_string($value);
+        $escaped_value = $conn->real_escape_string($value);
+        
+        // Set default value to '0' if the field is empty
+        $values[$key] = !empty($escaped_value) ? $escaped_value : '0';
     }
+
+    // Remove 'submit_input' from the array of values
+    unset($values['submit_input']);
 
     // Now, you can process the submitted data, for example, inserting it into the database
     // Assuming 'tblproduct_transaction' is your table name
@@ -21,6 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit_input"])) {
     if ($conn->query($sql) === TRUE) {
         // Insertion successful
         echo "New record created successfully";
+        header("location: main.php");
     } else {
         // Error occurred
         echo "Error: " . $sql . "<br>" . $conn->error;
@@ -30,3 +37,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit_input"])) {
     $conn->close();
 }
 ?>
+
+
+

@@ -8,6 +8,9 @@
   <link rel="stylesheet" href="../css/bootstrap.min.css">
   <link rel="stylesheet" href="../css/main.css">
   <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
 <div class="contain-fluid">
@@ -30,9 +33,10 @@
           <button class="btn btn-success" type="submit">Search</button>
         </form>
         
-        <button type="button" class="btn btn-success" onclick="$('#addModal').modal('show')">ADD</button>
+        
 
         <div class="form-inline d-flex flex-row gap-1">
+          <button type="button" class="btn btn-primary" onclick="$('#addModal').modal('show')">Create</button>
           <input type="number" id="row" style="width:60px; height: 40px;" class="form-control"/>
           <button type="button" class="btn btn-success" id="filter">Filter</button>
         </div>
@@ -61,14 +65,49 @@
                    $columns[] = $row["department_name"];
                   echo "<th class='text-center'>" . $row["department_name"] . "</th>";
                   }
+                  echo "<th class='text-center'>Tool</th>";
                   } else {
                   echo "<th>No results found</th>"; // Output if no results found
                   }
+                  
                   ?>
               </tr>
             </thead>
             <tbody id="table-body">
+              <?php
+                include '../connection/connect.php';
 
+                $sql = "SELECT * FROM tblproduct_transaction";
+                $result = $conn->query($sql);
+
+                if ($result->num_rows > 0) {
+                    // Fetch column names dynamically
+                    $columns = array();
+                    $row = $result->fetch_assoc();
+                    foreach ($row as $key => $value) {
+                        $columns[] = $key;
+                    }
+                    // Reset the result pointer back to the beginning
+                    $result->data_seek(0);
+                    // Output data row by row
+                    while ($row = $result->fetch_assoc()) {
+                        echo "<tr>";
+                        foreach ($columns as $column) {
+                            echo "<td>" . $row[$column] . "</td>";
+                        }
+                        // Add Edit and Delete buttons
+                        echo "<td><button class='btn btn-primary mx-2'><i class='fa-solid fa-pen-to-square'></i></button>
+                                  <button type='button' class='btn btn-danger'><i class='fa-solid fa-trash-can text-light'></i></button>
+                             </td>";
+                        echo "</tr>";
+                    }
+                    
+                } else {
+                    echo "<tr><td colspan='" . count($columns) . "'>0 results</td></tr>"; // Output if no results found
+                }
+
+                $conn->close(); // Close the database connection
+              ?>
             </tbody>
           </table>
         </div>
@@ -87,8 +126,8 @@
 <div class="modal fade" style="--bs-modal-width: 1000px !important;" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addModalLabel">Create</h5>
+            <div class="modal-header px-5">
+                <h2 class="modal-title" id="addModalLabel">Create</h2>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -119,21 +158,29 @@
                                           echo "<th>No results found</th>"; // Output if no results found
                                       }
                                     ?>
-                                    </tr>
+                                   </tr>
                                 </thead>
                                 <?php
-                                    // Output empty input fields in the tbody
-                                    echo "<tbody><tr>";
-                                    if ($result && $result->num_rows > 0) {
-                                        foreach ($columns as $column) {
-                                            echo "<td><input type='text' name='" . $column . "'></td>";
-                                        }
-                                    } else {
-                                        // Output a single cell spanning all columns if no results found
-                                        echo "<td colspan='" . count($columns) . "'>No data available</td>";
-                                    }
-                                    echo "</tr></tbody>";
-                                ?>
+                                  // Output empty input fields in the tbody
+                                  echo "<tbody><tr>";
+                                  if ($result && $result->num_rows > 0) {
+                                      foreach ($columns as $index => $column) {
+                                          // Check if it's the first column
+                                          if ($index === 0) {
+                                              echo "<td><input type='text' name='" . $column . "' required></td>";
+                                          } else {
+                                              echo "<td><input type='text' name='" . $column . "'></td>";
+                                          }
+                                      }
+
+                                      
+                                  } else {
+                                      // Output a single cell spanning all columns if no results found
+                                      echo "<td colspan='" . count($columns) . "'>No data available</td>";
+                                  }
+                                  echo "</tr></tbody>";
+                                ?> 
+
                             </table>
                         </div>
                     </div>
