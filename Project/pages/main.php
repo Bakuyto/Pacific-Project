@@ -84,7 +84,7 @@
                     // Fetch column names dynamically
                     $columns = array();
                     $row = $result->fetch_assoc();
-                    foreach ($row as $key => $value) {
+                      foreach ($row as $key => $value) {
                         $columns[] = $key;
                     }
                     // Reset the result pointer back to the beginning
@@ -97,7 +97,7 @@
                         }
                         // Add Edit and Delete buttons
                         echo "<td><button class='btn btn-primary mx-2'><i class='fa-solid fa-pen-to-square'></i></button>
-                                  <button type='button' class='btn btn-danger'><i class='fa-solid fa-trash-can text-light'></i></button>
+                                  <button type='button' name='row-delete' class='btn btn-danger'><i class='fa-solid fa-trash-can text-light'></i></button>
                              </td>";
                         echo "</tr>";
                     }

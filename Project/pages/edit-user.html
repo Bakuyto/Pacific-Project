@@ -1,0 +1,40 @@
+<?php
+include '../connection/connect.php';
+
+if(isset($_POST['edit_user'])) {
+    $user_id = $_POST['user_id'];
+
+    // Fetch user details based on user_id
+    $sql = "SELECT * FROM tbluser WHERE user_pk = $user_id";
+    $result = $conn->query($sql);
+
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $user_full_name = $row['user_full_name'];
+        $user_log_name = $row['user_log_name'];
+        $user_log_password = $row['user_log_password'];
+        $user_level_fk = $row['user_level_fk'];
+        $user_department_fk = $row['user_department_fk'];
+    } else {
+        echo "User not found!";
+    }
+}
+
+if(isset($_POST['update_user'])) {
+    $user_id = $_POST['user_id'];
+    $user_full_name = $_POST['user_full_name'];
+    $user_log_name = $_POST['user_log_name'];
+    $user_log_password = $_POST['user_log_password'];
+    $user_level_fk = $_POST['user_level_fk'];
+    $user_department_fk = $_POST['user_department_fk'];
+
+    // Update user information in the database
+    $sql = "UPDATE tbluser SET user_full_name='$user_full_name', user_log_name='$user_log_name', user_log_password='$user_log_password', user_level_fk='$user_level_fk', user_department_fk='$user_department_fk' WHERE user_pk='$user_id'";
+    if ($conn->query($sql) === TRUE) {
+        echo "Record updated successfully";
+    } else {
+        echo "Error updating record: " . $conn->error;
+    }
+}
+
+$conn->close();

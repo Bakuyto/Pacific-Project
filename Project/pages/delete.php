@@ -24,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $conn->close();
 } else {
     // If the request method is not POST, redirect back to the page where the delete button is located
-    header("Location: your_page.php");
+    header("Location: create-user.php");
     exit();
 }
 ?>

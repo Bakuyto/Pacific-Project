@@ -1,4 +1,3 @@
-<?php include '../config/config.php';?>
 <?php include '../connection/redirect.php';?>
 
 <!DOCTYPE html>
@@ -38,7 +37,7 @@
         <div class="box1 col-sm-12 col-lg-4 border">
           <div class="box-header">
             <div class="h1 mt-5">New Department</div>
-            <form method="POST">
+            <form method="POST" action="insert-department.php">
               <input name="department_name" class="form-control m-auto mt-5 border-black" style="width:80%;" required>
               <div class="save-but d-flex justify-content-center m-auto mt-5">
                 <button type="submit" name="submit_department" style="background-color: var(--blue);"
@@ -58,7 +57,36 @@
                 </thead>
                 <tbody>
 
-                  <?php include '../partitial/department.php' ?>  
+                <?php
+                    include '../connection/connect.php';
+                    $sql = "CALL Load_All_department"; // SQL query to select data from the table
+                    $result = $conn->query($sql); // Execute the query
+
+                    if ($result->num_rows > 0) {
+                        while ($row = $result->fetch_assoc()) {
+                            // Output data row by row
+                            echo "<tr>
+                                    <td class='d-flex justify-content-between border' name='" . $row["department_name"] . "' id='" . $row["department_pk"] . "'>" . $row["department_name"] . "
+                                    <form method='POST'>
+                                        <button 
+                                            type='button'
+                                            name='plus-button'
+                                            data-department-name='" . $row["department_name"] . "' 
+                                            data-department-pk='" . $row["department_pk"] . "' 
+                                            class='btn btn-primary plus-btn fw-bolder' 
+                                            data-bs-toggle='modal' 
+                                            data-bs-target='#exampleModal'>
+                                            +
+                                        </button>
+                                    </form>
+                                    </td>
+                                  </tr>";
+                        }
+                    } else {
+                        echo "<tr><td colspan='1'>0 results</td></tr>"; // Output if no results found
+                    }
+                    $conn->close(); // Close the database connection
+                ?>  
 
                 </tbody>
               </table>
@@ -68,7 +96,7 @@
         <div class="box2 col-sm-12 col-lg-4 border">
           <div class="box-header">
             <div class="h1 mt-5">New Transaction</div>
-            <form method="POST">
+            <form method="POST" action="insert-column.php">
               <input name="column_name" class="form-control m-auto mt-5 border-black" style="width:80%;" required>
               <div class="save-but d-flex justify-content-center m-auto mt-5">
                 <button type="submit" name="submit_transaction" style="background-color: var(--blue);"
@@ -88,38 +116,99 @@
                 </thead>
                 <tbody>
 
-                    <?php include '../partitial/transaction.php' ?>
+                <?php
+                      include '../connection/connect.php';
+                      $sql = "CALL Load_All_Transaction"; // SQL query to select data from the table
+                      $result = $conn->query($sql); // Execute the query
+                  if ($result && $result->num_rows > 0) {
+                      while ($row = $result->fetch_assoc()) {
+                          // Output data row by row
+                          echo "<tr>
+                                  <td class='d-flex justify-content-between border'>" . $row["department_name"] . " 
+                                      <button type='button' class='btn btn-danger delete-btn' 
+                                          onclick='setTransactionToDelete(\"" . $row["department_name"] . "\")' 
+                                          data-bs-toggle='modal' data-bs-target='#deleteModal'>
+                                          <i class='fa-solid fa-trash-can text-light'></i>
+                                      </button>
+                                  </td>
+                                </tr>";
+                      }
+                  } else {
+                      echo "<tr><td colspan='1'>0 results</td></tr>"; // Output if no results found
+                  }
+                  $conn->close(); // Close the database connection
+              ?>
 
                 </tbody>
               </table>
             </div>
           </div>
         </div>
+
         <div class="box3 col-sm-12 col-lg-4 border">
           <div class="h1 mt-5">New User</div>
-          <form method="POST">
+                <form>
+                <input type="hidden" name="user_id" value="<?php if(isset($_POST['edit_user'])) echo htmlspecialchars($_POST['user_id']); ?>" />
             <label for="exampleInputEmail1" class="form-label text-start w-75">FullName</label>
             <input name="user_full_name" class="form-control m-auto mb-3 border-black" style="width:80%;" required>
             <label for="exampleInputEmail1" class="form-label text-start w-75">Username</label>
             <input name="user_log_name" class="form-control m-auto mb-3 border-black" style="width:80%;" required>
             <label for="exampleInputEmail1" class="form-label text-start w-75">Password</label>
             <input name="user_log_password" class="form-control m-auto mb-3 border-black" style="width:80%;" required>
-            <label for="exampleInputEmail1" class="form-label text-start w-75">User Level</label>
-            <input name="user_level_fk" class="form-control m-auto mb-3  border-black" style="width:80%;" required>
-            <select name="user_department_fk" class="form-select m-auto mb-3"
+            <!-- <label for="exampleInputEmail1" class="form-label text-start w-75">User Level</label> -->
+            <select name="user_level_fk" class="form-select m-auto mb-3"
+             style="width:80%;max-height:20vh; overflow-y:scroll;" aria-label="Default select example">
+              <option class="text-dark" selected disabled>User Level</option>
+              <?php
+                    include '../connection/connect.php';
+                    $sql = "SELECT * FROM tbluserlevel"; // SQL query to select data from the table
+                    $result = $conn->query($sql); // Execute the query
+    
+                    if ($result->num_rows > 0) {
+                      while ($row = $result->fetch_assoc()) {
+                          $userlevel_name = $row['userlevel_name']; // Fetch department name
+                          $option = $row['userlever_pk'];// Fetch userlever_pk
+                          // Output data row by row
+                  ?>
+                          <option value="<?php echo $option; ?>"><?php echo $userlevel_name; ?> </option>
+                  <?php
+                      }
+                  } else {
+                      echo "<option value='' selected>No departments found</option>"; // Output if no results found
+                  }
+                    $conn->close(); // Close the database connection
+                  ?>
+            </select>
+            <select name="user_department_fk" class="form-select m-auto mb-5"
               style="width:80%;max-height:20vh; overflow-y:scroll;" aria-label="Default select example">
-              <option class="text-dark" selected>Select Department</option>
+              <option class="text-dark" selected disabled>Select Department</option>
 
-              <?php include '../partitial/select_department.php' ?>
+              <?php 
+                    include '../connection/connect.php';
+                    $sql = "CALL Load_All_department"; // SQL query to select data from the table
+                    $result = $conn->query($sql); // Execute the query
+    
+                    if ($result->num_rows > 0) {
+                      while ($row = $result->fetch_assoc()) {
+                          $department_name = $row['department_name']; // Fetch department name
+                          $option = $row['department_pk'];// Fetch department pk
+                          // Output data row by row
+                  ?>
+                          <option value="<?php echo $option; ?>"><?php echo $department_name; ?> </option>
+                  <?php
+                      }
+                  } else {
+                      echo "<option value='' selected>No departments found</option>"; // Output if no results found
+                  }
+                    $conn->close(); // Close the database connection
+                  ?>
 
             </select>
             <div class="save-but d-flex justify-content-center m-auto">
               <button type="submit" name="submit_user" style="background-color: var(--blue);"
                 class="btn fw-bolder mb-5 w-50">Save</button>
             </div>
-          </form>
-
-          <div class="container">
+            <div class="container">
             <div class="table-responsive" style="height:40vh;">
               <table class="table table-bordered">
                 <thead>
@@ -131,13 +220,36 @@
                 </thead>
                 <tbody>
 
-                    <?php include '../partitial/user-list.php'?>
+                    
+                    <?php
+                include '../connection/connect.php';
+                $sql = "CALL Load_All_User"; // SQL query to select data from the table
+                $result = $conn->query($sql); // Execute the query
+
+                if ($result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()) {
+                        // Output data row by row
+                        echo "<tr>
+                            <td class='d-flex justify-content-between border'>" . $row["user_full_name"] . " 
+                            <button type='submit' name='edit_user' class='btn btn-primary mx-2'><i class='fa-solid fa-pen-to-square'></i></button>
+                        </tr>";
+                    }
+                } else {
+                    echo "<tr><td colspan='1'>0 results</td></tr>"; // Output if no results found
+                }
+                $conn->close(); // Close the database connection
+              ?>
 
                 </tbody>
               </table>
             </div>
           </div>
+                </form>
         </div>
+
+      </div>
+        </div>
+
       </div>
     </div>
 
@@ -158,7 +270,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form method='POST' action="code.php">
+                <form method='POST' action="save-multiple-checkbox.php">
                   <?php
                   include '../connection/connect.php';
 
@@ -201,7 +313,7 @@
         </div>
         <div class="modal-body">
           <p>Are you sure you want to delete this transaction?</p>
-          <form id="deleteTransactionForm" class="d-flex justify-content-center" method="POST">
+          <form action="delete-column.php" id="deleteTransactionForm" class="d-flex justify-content-center" method="POST">
             <input type="hidden" name="transactionToDelete" id="transactionToDelete">
             <button type="button" class="btn btn-secondary mx-1" data-bs-dismiss="modal">Cancel</button>
             <button type="submit" name="submit_delete_transaction" class="btn btn-danger">Delete</button>
