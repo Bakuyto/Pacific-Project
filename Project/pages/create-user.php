@@ -147,8 +147,7 @@
 
         <div class="box3 col-sm-12 col-lg-4 border">
           <div class="h1 mt-5">New User</div>
-                <form>
-                <input type="hidden" name="user_id" value="<?php if(isset($_POST['edit_user'])) echo htmlspecialchars($_POST['user_id']); ?>" />
+              <form method="POST" action="insert-update.php">
             <label for="exampleInputEmail1" class="form-label text-start w-75">FullName</label>
             <input name="user_full_name" class="form-control m-auto mb-3 border-black" style="width:80%;" required>
             <label for="exampleInputEmail1" class="form-label text-start w-75">Username</label>
