@@ -1,18 +1,18 @@
-<?php
+    <?php
 
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "inventorymanagement";
+    $servername = "localhost";
+    $username = "root";
+    $password = "";
+    $dbname = "inventorymanagement";
 
-//create connection
+    //create connection
 
-$conn = new mysqli($servername, $username, $password, $dbname);
+    $conn = new mysqli($servername, $username, $password, $dbname);
 
-//check connection 
+    //check connection 
 
-if($conn->connect_error){
-    echo "connection successfully";
-}
+    if($conn->connect_error){
+        echo "connection successfully";
+    }
 
-?>
+    ?>
