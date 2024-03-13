@@ -1,54 +1,52 @@
-document.addEventListener("DOMContentLoaded", function() {
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+$(document).ready(function() {
     // Define the filtering logic
-    document.getElementById('filter').addEventListener('click', function() {
-        var rowLimit = document.getElementById('row').value;
+    $('#filter').on('click', function() {
+        var rowLimit = $('#row').val();
         filterTable('myTable', rowLimit);
     });
 
     function filterTable(tableId, rowLimit) {
-        var table = document.getElementById(tableId);
-        var rows = table.getElementsByTagName('tr');
+        var $table = $('#' + tableId);
+        var $rows = $table.find('tr');
     
         // Hide all rows initially
-        for (var i = 1; i < rows.length; i++) { // Start from 1 to exclude the header row
-            rows[i].style.display = 'none';
-        }
+        $rows.slice(1).hide();
     
         // Show only the specified number of rows starting from index 1
-        for (var i = 1; i <= rowLimit; i++) { // Start from 1
-            if (rows[i]) { // Check if the row exists
-                rows[i].style.display = '';
-            }
-        }
+        $rows.slice(1, parseInt(rowLimit) + 1).show();
     }
-    
 
     // Define the pagination logic
     const rowsPerPage = 12;
-    const table = document.getElementById("myTable");
-    const rows = table.getElementsByTagName("tr");
-    let totalPages = Math.ceil((rows.length - 1) / rowsPerPage);
+    const $table = $("#myTable");
+    const $rows = $table.find("tr").slice(1);
+    let totalPages = Math.ceil(($rows.length) / rowsPerPage);
     let currentPage = 1;
 
     function showPage(page) {
-        // Your pagination logic here
+        $rows.hide().slice((page - 1) * rowsPerPage, page * rowsPerPage).show();
     }
 
     function goToPage(page) {
-        // Your page navigation logic here
+        if (page >= 1 && page <= totalPages) {
+            currentPage = page;
+            showPage(currentPage);
+            $("#page-number").val(currentPage);
+        }
     }
 
     // Event listeners for pagination controls
-    document.getElementById("prev-btn").addEventListener("click", function() {
+    $("#prev-btn").on("click", function() {
         goToPage(currentPage - 1);
     });
 
-    document.getElementById("next-btn").addEventListener("click", function() {
+    $("#next-btn").on("click", function() {
         goToPage(currentPage + 1);
     });
 
-    document.getElementById("page-number").addEventListener("change", function() {
-        const pageNum = parseInt(this.value);
+    $("#page-number").on("change", function() {
+        const pageNum = parseInt($(this).val());
         if (!isNaN(pageNum)) {
             goToPage(pageNum);
         }
@@ -56,18 +54,12 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Initial setup
     showPage(currentPage);
-    document.getElementById('total-pages').textContent = totalPages;
+    $("#total-pages").text(totalPages);
 });
 
-
-document.addEventListener("DOMContentLoaded", function() {
-    const table = document.getElementById('myTable');
-
-    table.addEventListener('input', function(event) {
-      const target = event.target;
-      if (target.tagName === 'TD') {
+$(document).ready(function() {
+    $('#myTable').on('input', 'td', function(event) {
         // Update the cell value in your database or perform other operations
-        console.log(`Changed value: ${target.textContent}`);
-      }
+        console.log(`Changed value: ${$(this).text()}`);
     });
-  });
+});

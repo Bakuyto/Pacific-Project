@@ -2,10 +2,8 @@
 include '../connection/connect.php'; // Include database connection
 
 // Check if data is received
-var_dump($_POST);
-
 if (isset($_POST['update-user'])) {
-    $user_pk = 1; // Receive user_pk from the form
+    $user_pk = $_POST['user_pk']; // Receive user_pk from the form
     $user_full_name = $_POST['user_full_name'];
     $user_log_name = $_POST['user_log_name'];
     $user_log_password = $_POST['user_log_password'];
@@ -22,7 +20,7 @@ if (isset($_POST['update-user'])) {
     if ($stmt->execute()) {
         echo "Record updated successfully";
         // Redirect to a new page after successful update if needed
-        // header("Location: create-user.php");
+        header("Location: create-user.php");
     } else {
         echo "Error updating record: " . $stmt->error;
     }
@@ -32,3 +30,4 @@ if (isset($_POST['update-user'])) {
 } else {
     echo "Update user data not received.";
 }
+?>

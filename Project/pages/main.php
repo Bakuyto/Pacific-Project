@@ -50,64 +50,71 @@
             <thead>
               <tr>
               <?php
-                  include '../connection/connect.php';
+                include '../connection/connect.php';
 
-                  $sql = "SELECT
-                  COLUMN_NAME AS department_name
-                  FROM INFORMATION_SCHEMA.COLUMNS
-                   WHERE TABLE_NAME = 'tblproduct_transaction';";
-                  $result = $conn->query($sql); // Execute the query
+                $sql = "SELECT
+                    COLUMN_NAME AS department_name
+                    FROM INFORMATION_SCHEMA.COLUMNS
+                    WHERE TABLE_NAME = 'tblproduct_transaction';";
+                $result = $conn->query($sql); // Execute the query
 
-                  if ($result && $result->num_rows > 0) {
-                  // Fetch column names from the database
-                  $columns = array();
-                  while ($row = $result->fetch_assoc()) {
-                   $columns[] = $row["department_name"];
-                  echo "<th class='text-center'>" . $row["department_name"] . "</th>";
-                  }
-                  echo "<th class='text-center'>Tool</th>";
-                  } else {
-                  echo "<th>No results found</th>"; // Output if no results found
-                  }
-                  
-                  ?>
+                if ($result && $result->num_rows > 0) {
+                    // Fetch column names from the database
+                    $columns = array();
+                    $index = 0;
+                    while ($row = $result->fetch_assoc()) {
+                        $index++;
+                        if($index == 3) continue; // Skip rendering the column at index 2
+                        $columns[] = $row["department_name"];
+                        echo "<th class='text-center'>" . $row["department_name"] . "</th>";
+                    }
+                    echo "<th class='text-center'>Tool</th>";
+                } else {
+                    echo "<th>No results found</th>"; // Output if no results found
+                }
+                ?>
+
               </tr>
             </thead>
             <tbody id="table-body">
               <?php
-                include '../connection/connect.php';
+              include '../connection/connect.php';
 
-                $sql = "SELECT * FROM tblproduct_transaction";
-                $result = $conn->query($sql);
+              $sql = "SELECT * FROM tblproduct_transaction";
+              $result = $conn->query($sql);
 
-                if ($result->num_rows > 0) {
-                    // Fetch column names dynamically
-                    $columns = array();
-                    $row = $result->fetch_assoc();
-                      foreach ($row as $key => $value) {
-                        $columns[] = $key;
-                    }
-                    // Reset the result pointer back to the beginning
-                    $result->data_seek(0);
-                    // Output data row by row
-                    while ($row = $result->fetch_assoc()) {
-                        echo "<tr>";
-                        foreach ($columns as $column) {
-                            echo "<td>" . $row[$column] . "</td>";
-                        }
-                        // Add Edit and Delete buttons
-                        echo "<td><button class='btn btn-primary mx-2'><i class='fa-solid fa-pen-to-square'></i></button>
-                                  <button type='button' name='row-delete' class='btn btn-danger'><i class='fa-solid fa-trash-can text-light'></i></button>
-                             </td>";
-                        echo "</tr>";
-                    }
-                    
-                } else {
-                    echo "<tr><td colspan='" . count($columns) . "'>0 results</td></tr>"; // Output if no results found
-                }
+              if ($result->num_rows > 0) {
+                  // Fetch column names dynamically
+                  $columns = array();
+                  $row = $result->fetch_assoc();
+                  foreach ($row as $key => $value) {
+                      $columns[] = $key;
+                  }
+                  // Reset the result pointer back to the beginning
+                  $result->data_seek(0);
+                  // Output data row by row
+                  while ($row = $result->fetch_assoc()) {
+                      echo "<tr>";
+                      $columnIndex = 0;
+                      foreach ($columns as $column) {
+                          $columnIndex++;
+                          if ($columnIndex == 3) continue; // Skip rendering the column at index 2
+                          echo "<td>" . $row[$column] . "</td>";
+                      }
+                      // Add Edit and Delete buttons
+                      echo "<td><button class='btn btn-primary mx-2'><i class='fa-solid fa-pen-to-square'></i></button>
+                                <button type='button' name='row-delete' class='btn btn-danger'><i class='fa-solid fa-trash-can text-light'></i></button>
+                          </td>";
+                      echo "</tr>";
+                  }
+                  
+              } else {
+                  echo "<tr><td colspan='" . (count($columns) + 1) . "'>0 results</td></tr>"; // Output if no results found
+              }
 
-                $conn->close(); // Close the database connection
+              $conn->close(); // Close the database connection
               ?>
+
             </tbody>
           </table>
         </div>

@@ -235,9 +235,11 @@
                           // Output data row by row
                           echo "<tr>
                                 <td class='d-flex justify-content-between border'>" . $row["user_full_name"] . " 
-                                  <button type='button' id=".$row["user_pk"]." class='btn btn-primary mx-2 update-btn' ><i class='fa-solid fa-pen-to-square'></i></button>
+                                <input type='hidden' name='user_pk' value='".$row["user_pk"]." '>
+                                <button type='button' id='".$row["user_pk"]."' class='btn btn-primary mx-2 update-btn' data-user-fullname='".$row["user_full_name"]."' data-user-username='".$row["user_log_name"]."' data-user-password='".$row["user_log_password"]."' data-user-level='".$row["user_level_fk"]."' data-user-department='".$row["user_department_fk"]."'><i class='fa-solid fa-pen-to-square'></i></button>
                                 </td>
                               </tr>";
+                              
                       }
                   } else {
                       echo "<tr><td colspan='1'>0 results</td></tr>"; // Output if no results found
@@ -261,82 +263,77 @@
 
   <!-- Modal -->
   <div id="updateModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-    <div class="modal-header">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Update</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-    <form method="POST" action="update-user.php">
-          <div class="form-group">
-          <label class="d-flex mx-5 text-start">FullName</label>
-          <input name="user_full_name" class="form-control m-auto mb-3 border-black" style="width:80%;" required>
-          </div>
-        <div class="form-group">
-          <label class="d-flex mx-5 text-start">Username</label>
-          <input name="user_log_name" class="form-control m-auto mb-3 border-black" style="width:80%;" required>
-        </div>
-        <div class="form-group">
-          <label class="d-flex mx-5 text-start">Password</label>
-          <input name="user_log_password" class="form-control m-auto mb-3 border-black" style="width:80%;" required>
-        </div>
-        <select name="user_level_fk" class="form-select m-auto mb-3"
-             style="width:80%;max-height:20vh; overflow-y:scroll;" aria-label="Default select example">
-              <option class="text-dark" selected disabled>User Level</option>
-              <?php
+            <form id="updateUserForm" method="POST" action="update-user.php">
+                <input type="hidden" id="user_pk" name="user_pk" value="">
+                <div class="form-group">
+                    <label class="d-flex mx-5 text-start">FullName</label>
+                    <input id="user_full_name" name="user_full_name" class="form-control m-auto mb-3 border-black" style="width:80%;" required>
+                </div>
+                <div class="form-group">
+                    <label class="d-flex mx-5 text-start">Username</label>
+                    <input id="user_log_name" name="user_log_name" class="form-control m-auto mb-3 border-black" style="width:80%;" required>
+                </div>
+                <div class="form-group">
+                    <label class="d-flex mx-5 text-start">Password</label>
+                    <input id="user_log_password" name="user_log_password" class="form-control m-auto mb-3 border-black" style="width:80%;" required>
+                </div>
+                <select id="user_level_fk" name="user_level_fk" class="form-select m-auto mb-3" style="width:80%;max-height:20vh; overflow-y:scroll;" aria-label="Default select example">
+                    <option class="text-dark" selected disabled>User Level</option>
+                    <?php
                     include '../connection/connect.php';
                     $sql = "SELECT * FROM tbluserlevel"; // SQL query to select data from the table
                     $result = $conn->query($sql); // Execute the query
-    
-                    if ($result->num_rows > 0) {
-                      while ($row = $result->fetch_assoc()) {
-                          $userlevel_name = $row['userlevel_name']; // Fetch department name
-                          $option = $row['userlever_pk'];// Fetch userlever_pk
-                          // Output data row by row
-                  ?>
-                          <option value="<?php echo $option; ?>"><?php echo $userlevel_name; ?> </option>
-                  <?php
-                      }
-                  } else {
-                      echo "<option value='' selected>No departments found</option>"; // Output if no results found
-                  }
-                    $conn->close(); // Close the database connection
-                  ?>
-            </select>
-            <select name="user_department_fk" class="form-select m-auto mb-5"
-              style="width:80%;max-height:20vh; overflow-y:scroll;" aria-label="Default select example">
-              <option class="text-dark" selected disabled>Select Department</option>
 
-              <?php 
+                    if ($result->num_rows > 0) {
+                        while ($row = $result->fetch_assoc()) {
+                            $userlevel_name = $row['userlevel_name']; // Fetch department name
+                            $option = $row['userlever_pk'];// Fetch userlever_pk
+                            // Output data row by row
+                            ?>
+                            <option value="<?php echo $option; ?>"><?php echo $userlevel_name; ?> </option>
+                            <?php
+                        }
+                    } else {
+                        echo "<option value='' selected>No departments found</option>"; // Output if no results found
+                    }
+                    $conn->close(); // Close the database connection
+                    ?>
+                </select>
+                <select id="user_department_fk" name="user_department_fk" class="form-select m-auto mb-5" style="width:80%;max-height:20vh; overflow-y:scroll;" aria-label="Default select example">
+                    <option class="text-dark" selected disabled>Select Department</option>
+                    <?php
                     include '../connection/connect.php';
                     $sql = "CALL Load_All_department"; // SQL query to select data from the table
                     $result = $conn->query($sql); // Execute the query
-    
+
                     if ($result->num_rows > 0) {
-                      while ($row = $result->fetch_assoc()) {
-                          $department_name = $row['department_name']; // Fetch department name
-                          $option = $row['department_pk'];// Fetch department pk
-                          // Output data row by row
-                  ?>
-                          <option value="<?php echo $option; ?>"><?php echo $department_name; ?> </option>
-                  <?php
-                      }
-                  } else {
-                      echo "<option value='' selected>No departments found</option>"; // Output if no results found
-                  }
+                        while ($row = $result->fetch_assoc()) {
+                            $department_name = $row['department_name']; // Fetch department name
+                            $option = $row['department_pk'];// Fetch department pk
+                            // Output data row by row
+                            ?>
+                            <option value="<?php echo $option; ?>"><?php echo $department_name; ?> </option>
+                            <?php
+                        }
+                    } else {
+                        echo "<option value='' selected>No departments found</option>"; // Output if no results found
+                    }
                     $conn->close(); // Close the database connection
-                  ?>
-
-            </select>
-            <div class="save-but d-flex justify-content-center m-auto">
-            <button type="submit" name="update-user" style="background-color: var(--blue);" class="btn fw-bolder mb-5 w-50">Save</button>
-
-            </div>
-              </form>
+                    ?>
+                </select>
+                <div class="save-but d-flex justify-content-center m-auto">
+                    <button type="submit" name="update-user" style="background-color: var(--blue);" class="btn fw-bolder mb-5 w-50">Save</button>
+                </div>
+            </form>
+        </div>
     </div>
-  </div>
 </div>
-
 
  <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -419,14 +416,25 @@
       var username = $(this).closest('tr').find('.username').text().trim();
       var password = $(this).closest('tr').find('.password').text().trim();
 
-      $('#user_pk').val(userId);
-      $('#user_full_name').val(fullName);
-      $('#user_log_name').val(username);
-      $('#user_log_password').val(password);
+      // Retrieve data from the button attributes or from another source
+      var userFullName = $(this).data('user-fullname');
+      var userUsername = $(this).data('user-username');
+      var userPassword = $(this).data('user-password');
+      var userLevel = $(this).data('user-level');
+      var userDepartment = $(this).data('user-department');
+
+      $('#user_pk').val(userId); // Set the user_pk value
+      $('#user_full_name').val(fullName || userFullName);
+      $('#user_log_name').val(username || userUsername);
+      $('#user_log_password').val(password || userPassword);
+      $('#user_level_fk').val(userLevel);
+      $('#user_department_fk').val(userDepartment);
 
       $('#updateModal').modal('show'); // Show the modal
     });
   });
 </script>
+
+
 
 </html>
