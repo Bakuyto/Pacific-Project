@@ -10,3 +10,4 @@ function setTransactionToDelete(transactionName) {
           modalTitle.id = this.parentNode.id; // Set the ID based on the department ID
         });
       });
+      

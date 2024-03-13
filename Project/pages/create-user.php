@@ -151,19 +151,19 @@
               <form method="POST" action="insert-user.php">
           <div class="form-group">
           <label class="d-flex mx-5 text-start">FullName</label>
-          <input name="user_full_name" class="form-control m-auto mb-3 border-black" style="width:80%;" required>
+          <input type="text" name="user_full_name" class="form-control m-auto mb-3 border-black" style="width:80%;" required>
           </div>
         <div class="form-group">
           <label class="d-flex mx-5 text-start">Username</label>
-          <input name="user_log_name" class="form-control m-auto mb-3 border-black" style="width:80%;" required>
+          <input type="text" name="user_log_name" class="form-control m-auto mb-3 border-black" style="width:80%;" required>
         </div>
         <div class="form-group">
           <label class="d-flex mx-5 text-start">Password</label>
-          <input name="user_log_password" class="form-control m-auto mb-3 border-black" style="width:80%;" required>
+          <input type="password" name="user_log_password" class="form-control m-auto mb-3 border-black" style="width:80%;" required>
         </div>
         <select name="user_level_fk" class="form-select m-auto mb-3"
-             style="width:80%;max-height:20vh; overflow-y:scroll;" aria-label="Default select example">
-              <option class="text-dark" selected disabled>User Level</option>
+             style="width:80%;max-height:20vh; overflow-y:scroll;" aria-label="Default select example" required>
+              <option class="text-dark" value="" selected disabled>User Level</option>
               <?php
                     include '../connection/connect.php';
                     $sql = "SELECT * FROM tbluserlevel"; // SQL query to select data from the table
@@ -185,8 +185,8 @@
                   ?>
             </select>
             <select name="user_department_fk" class="form-select m-auto mb-5"
-              style="width:80%;max-height:20vh; overflow-y:scroll;" aria-label="Default select example">
-              <option class="text-dark" selected disabled>Select Department</option>
+              style="width:80%;max-height:20vh; overflow-y:scroll;"    required>
+              <option class="text-dark" value="" selected disabled>Select Department</option>
 
               <?php 
                     include '../connection/connect.php';
@@ -261,8 +261,8 @@
   </div>
   </div>
 
-  <!-- Modal -->
-  <div id="updateModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel" aria-hidden="true">
+<!-- Modal -->
+<div id="updateModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -273,15 +273,15 @@
                 <input type="hidden" id="user_pk" name="user_pk" value="">
                 <div class="form-group">
                     <label class="d-flex mx-5 text-start">FullName</label>
-                    <input id="user_full_name" name="user_full_name" class="form-control m-auto mb-3 border-black" style="width:80%;" required>
+                    <input type="text" id="user_full_name" name="user_full_name" class="form-control m-auto mb-3 border-black" style="width:80%;">
                 </div>
                 <div class="form-group">
                     <label class="d-flex mx-5 text-start">Username</label>
-                    <input id="user_log_name" name="user_log_name" class="form-control m-auto mb-3 border-black" style="width:80%;" required>
+                    <input type="text" id="user_log_name" name="user_log_name" class="form-control m-auto mb-3 border-black" style="width:80%;">
                 </div>
                 <div class="form-group">
-                    <label class="d-flex mx-5 text-start">Password</label>
-                    <input id="user_log_password" name="user_log_password" class="form-control m-auto mb-3 border-black" style="width:80%;" required>
+                    <label for="password" class="d-flex mx-5 text-start">Password</label>
+                    <input  id="user_log_password" name="user_log_password" class="form-control m-auto mb-3 border-black" style="width:80%;">
                 </div>
                 <select id="user_level_fk" name="user_level_fk" class="form-select m-auto mb-3" style="width:80%;max-height:20vh; overflow-y:scroll;" aria-label="Default select example">
                     <option class="text-dark" selected disabled>User Level</option>
@@ -335,6 +335,7 @@
     </div>
 </div>
 
+
  <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -366,6 +367,10 @@
                       echo "<label>No results found</label>"; // Output if no results found
                   }
                   ?>
+                            <div class='form-group mb-3 d-flex justify-content-end'>
+                                <button type='button' class='btn btn-secondary mx-2' data-bs-dismiss='modal'>Close</button>
+                                <button type='submit' name='save_multiple_checkbox' class='btn btn-primary'>Submit</button>
+                            </div>
                 </form>
             </div>
         </div>
@@ -434,7 +439,5 @@
     });
   });
 </script>
-
-
 
 </html>
